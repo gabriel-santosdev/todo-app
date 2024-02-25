@@ -7,6 +7,7 @@
       :list="todoList"
       group="todos"
       itemKey="id"
+      @change="onDraggableChange"
     >
       <template #item="{ element: todo }">
         <li>
@@ -19,31 +20,37 @@
       </template>
     </Draggable>
 
-    <CreatedTodo :status="props.status"/>
-
+    <CreatedTodo :status="props.status" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { TodoStatus } from "@/types";
-import Draggable from "vuedraggable";
-import useTodos from "@/store/useTodos";
-import CreatedTodo from "./CreatedTodo.vue";
+import { TodoStatus } from '@/types'
+import Draggable from 'vuedraggable'
+import useTodos from '@/store/useTodos'
+import CreatedTodo from './CreatedTodo.vue'
 interface Props {
-  status: TodoStatus;
+  status: TodoStatus
 }
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const { getTodosByStatus, deleteTodo } = useTodos();
-const todoList = getTodosByStatus(props.status);
+const { getTodosByStatus, deleteTodo, updateTodo } = useTodos()
+const todoList = getTodosByStatus(props.status)
 
 const groupLabel = {
-  [TodoStatus.Pending]: "Pending",
-  [TodoStatus.InProgress]: "In Progress",
-  [TodoStatus.Completed]: "Completed",
-};
+  [TodoStatus.Pending]: 'Pending',
+  [TodoStatus.InProgress]: 'In Progress',
+  [TodoStatus.Completed]: 'Completed'
+}
 
+const onDraggableChange = (payload: any) => {
+  console.log('payload', payload)
+  if (payload?.added?.element) {
+    //atualizar a props status (pending, progress, complete)
+    updateTodo(payload?.added?.element, props.status)
+  }
+}
 </script>
 
 <style scoped>
