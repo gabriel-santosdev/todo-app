@@ -1,34 +1,49 @@
 <template>
   <div class="group-wrapper">
     <h3>{{ groupLabel[props.status] }}</h3>
-    <ul>
-      <li v-for="todo in todoList" :key="todo.id">
-        {{ todo.title }} <br />
-        <span class="todo-description">{{ todo.description }}</span>
-      </li>
-    </ul>
+
+    <Draggable
+      class="draggable"
+      :list="todoList"
+      group="todos"
+      itemKey="id"
+    >
+      <template #item="{ element: todo }">
+        <li>
+          {{ todo.title }}
+          <span class="delete-icon" @click="deleteTodo(todo)">X</span>
+          <div>
+            <span class="todo-description">{{ todo.description }}</span>
+          </div>
+        </li>
+      </template>
+    </Draggable>
+
+    <CreatedTodo :status="props.status"/>
+
   </div>
 </template>
 
 <script setup lang="ts">
-import { TodoStatus, type Todo } from '@/types'
-import { computed } from 'vue'
-import useTodos from '@/store/useTodos'
-
+import { TodoStatus } from "@/types";
+import Draggable from "vuedraggable";
+import useTodos from "@/store/useTodos";
+import CreatedTodo from "./CreatedTodo.vue";
 interface Props {
-  status: TodoStatus
+  status: TodoStatus;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const { getTodoByStatus } = useTodos()
-const todoList = getTodoByStatus(props.status)
+const { getTodosByStatus, deleteTodo } = useTodos();
+const todoList = getTodosByStatus(props.status);
 
 const groupLabel = {
-  [TodoStatus.Pending]: 'Pending',
-  [TodoStatus.InProgress]: 'In progress',
-  [TodoStatus.Completed]: 'Completed'
-}
+  [TodoStatus.Pending]: "Pending",
+  [TodoStatus.InProgress]: "In Progress",
+  [TodoStatus.Completed]: "Completed",
+};
+
 </script>
 
 <style scoped>
@@ -39,18 +54,23 @@ const groupLabel = {
   width: 300px;
 }
 
-.group-wrapper ul {
-  padding: 0;
-}
-
 .group-wrapper li {
   list-style-type: none;
   background-color: rgba(2, 56, 128, 0.486);
   color: black;
   padding: 2px 5px;
   cursor: grab;
-  border-radius: 10px;
   margin-bottom: 10px;
+}
+
+.draggable {
+  min-height: 200px;
+}
+
+.delete-icon {
+  float: right;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .todo-description {
