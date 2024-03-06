@@ -2,13 +2,7 @@
   <div class="group-wrapper">
     <h3>{{ groupLabel[props.status] }}</h3>
 
-    <Draggable
-      class="draggable"
-      :list="todoList"
-      group="todos"
-      itemKey="id"
-      @change="onDraggableChange"
-    >
+    <Draggable class="draggable" :list="todoList" group="todos" itemKey="id" @change="onDraggableChange">
       <template #item="{ element: todo }">
         <li>
           {{ todo.title }}
@@ -16,6 +10,7 @@
           <div>
             <span class="todo-description">{{ todo.description }}</span>
           </div>
+          <div class="todo-created-at">Created: {{ formatDate(todo.createdAt) }}</div>
         </li>
       </template>
     </Draggable>
@@ -51,6 +46,12 @@ const onDraggableChange = (payload: any) => {
     updateTodo(payload?.added?.element, props.status)
   }
 }
+
+//função p/ formatar data
+function formatDate(dateString: any) {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+  return new Date(dateString).toLocaleDateString('pt-BR', options as Intl.DateTimeFormatOptions)
+}
 </script>
 
 <style scoped>
@@ -60,6 +61,14 @@ const onDraggableChange = (payload: any) => {
   background-color: rgba(0, 162, 255, 0.603);
   width: 300px;
 }
+
+.todo-created-at {
+  font-size: 10px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: italic;
+}
+
 
 .group-wrapper li {
   list-style-type: none;

@@ -13,13 +13,15 @@ const defaultVal = {
       id: 1,
       title: 'Teste Card',
       description: 'Descrição teste card',
-      status: TodoStatus.Pending
+      status: TodoStatus.Pending,
+      hour: ''
     },
     {
       id: 2,
       title: 'Teste',
       description: 'Testando',
-      status: TodoStatus.Pending
+      status: TodoStatus.Pending,
+      hour: ''
     }
   ],
   [TodoStatus.InProgress]: [],
@@ -41,10 +43,11 @@ export default () => {
     todoStore[todo.status].push(todo)
   }
 
+
   const deleteTodo = (todoToDelete: Todo) => {
-    todoStore[todoToDelete.status] =
-      todoStore[todoToDelete.status].filter[(todo) => todo.id !== todoToDelete.id]
-  }
+    todoStore[todoToDelete.status] = todoStore[todoToDelete.status].filter((todo) => todo.id !== todoToDelete.id);
+  };
+
 
   return { getTodosByStatus, addNewTodo, deleteTodo, updateTodo }
 }
