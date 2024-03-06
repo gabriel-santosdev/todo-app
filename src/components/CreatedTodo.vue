@@ -11,10 +11,10 @@
         <div class="todo-description">
           <textarea class="textarea" type="text" placeholder="Description" v-model="newTodo.description" />
         </div>
-        
+
         <div class="buttons-form">
-        <button type="submit" class="submit">Submit</button>
-        <button type="button" class="cancel" @click="resetForm">Cancel</button>
+          <button type="submit" class="submit">Submit</button>
+          <button type="button" class="cancel" @click="resetForm">Cancel</button>
         </div>
       </form>
     </template>
@@ -36,18 +36,24 @@ const { addNewTodo } = useTodos()
 
 const shouldDisplayForm = ref(false)
 
-const newTodo = reactive<Omit<Todo, 'id'>>({ title: '', description: '', status: props.status })
+const newTodo = reactive<Omit<Todo, 'id' | 'createdAt'>>({ title: '', description: '', status: props.status, hours: 0 })
 
 const resetForm = () => {
   shouldDisplayForm.value = false
   newTodo.title = ''
   newTodo.description = ''
+  newTodo.hours = 0
 }
 
 const handleOnSubmit = () => {
+
+  const createdAt = new Date().toISOString()
+
   addNewTodo({
     id: Math.random() * 10000000000000000,
-    ...newTodo
+    ...newTodo,
+    createdAt
+
   })
 
   resetForm()
@@ -64,11 +70,11 @@ const handleOnSubmit = () => {
   align-items: center;
 }
 
-.todo-description{
+.todo-description {
   margin-top: 7px;
 }
 
-.submit{
+.submit {
   font-weight: bold;
   color: black;
   background-color: rgba(0, 128, 0, 0.582);
@@ -76,7 +82,7 @@ const handleOnSubmit = () => {
   border-color: gray;
 }
 
-.cancel{
+.cancel {
   font-weight: bold;
   color: black;
   background-color: rgba(255, 0, 0, 0.651);
@@ -84,17 +90,17 @@ const handleOnSubmit = () => {
   border-color: gray;
 }
 
-.buttons-form{
+.buttons-form {
   flex-wrap: wrap;
   display: flex;
   gap: 1em;
 }
 
-.textarea{
+.textarea {
   border-radius: 8px 8px;
 }
 
-.input-title{
+.input-title {
   border-radius: 8px 8px;
 }
 </style>

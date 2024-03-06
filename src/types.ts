@@ -9,4 +9,6 @@ export interface Todo {
   title: string
   description: string
   status: TodoStatus
+  hours: number
+  createdAt: string
 }
