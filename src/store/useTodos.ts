@@ -8,22 +8,7 @@ interface TodoStore {
 }
 
 const defaultVal = {
-  [TodoStatus.Pending]: [
-    {
-      id: 1,
-      title: 'Teste Card',
-      description: 'Descrição teste card',
-      status: TodoStatus.Pending,
-      hour: ''
-    },
-    {
-      id: 2,
-      title: 'Teste',
-      description: 'Testando',
-      status: TodoStatus.Pending,
-      hour: ''
-    }
-  ],
+  [TodoStatus.Pending]: [],
   [TodoStatus.InProgress]: [],
   [TodoStatus.Completed]: []
 }
